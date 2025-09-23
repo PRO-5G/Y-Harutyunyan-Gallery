@@ -3,64 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Галерея картин художника</title>
+    <title>Галерея Ю. Арутюняна | Продажа картин</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Georgia', serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: #f9f5f0;
+            background-color: #f8f9fa;
             color: #333;
             line-height: 1.6;
         }
         
+        /* Шапка */
         header {
-            background-color: #2c3e50;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6572 100%);
             color: white;
             padding: 2rem 0;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
         
         .subtitle {
-            font-size: 1.2rem;
-            font-weight: normal;
-            opacity: 0.8;
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
         }
         
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+        .artist-bio {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Галерея */
+        .gallery-section {
             padding: 40px 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
         
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: #e74c3c;
+            margin: 10px auto;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
         .artwork {
             position: relative;
             overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
             background: white;
+            cursor: pointer;
         }
         
         .artwork:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
         
-        .artwork img {
+        .artwork.sold::before {
+            content: 'ПРОДАНО';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #e74c3c;
+            color: white;
+            padding: 8px 40px;
+            transform: rotate(45deg);
+            z-index: 10;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .artwork-img {
             width: 100%;
             height: 250px;
             object-fit: cover;
@@ -68,40 +127,49 @@
             transition: transform 0.5s ease;
         }
         
-        .artwork:hover img {
-            transform: scale(1.03);
+        .artwork:hover .artwork-img {
+            transform: scale(1.05);
         }
         
         .artwork-info {
-            padding: 15px;
-            text-align: center;
+            padding: 20px;
         }
         
         .artwork-title {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
             color: #2c3e50;
         }
         
-        .artwork-size {
-            font-size: 0.9rem;
+        .artwork-details {
+            font-size: 0.95rem;
             color: #7f8c8d;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .artwork-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 15px;
         }
         
         .view-details {
-            background-color: #3498db;
+            background: linear-gradient(to right, #3498db, #2980b9);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background-color 0.3s;
+            font-size: 1rem;
+            transition: all 0.3s;
+            width: 100%;
         }
         
         .view-details:hover {
-            background-color: #2980b9;
+            background: linear-gradient(to right, #2980b9, #2471a3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         /* Модальное окно */
@@ -112,31 +180,39 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.85);
             z-index: 1000;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .modal-content {
             background-color: white;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
-            animation: modalFade 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
-        @keyframes modalFade {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         .modal-header {
-            padding: 20px;
-            background-color: #2c3e50;
+            padding: 25px;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6572 100%);
             color: white;
             display: flex;
             justify-content: space-between;
@@ -144,18 +220,27 @@
         }
         
         .close-modal {
-            background: none;
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255,255,255,0.3);
         }
         
         .modal-body {
             display: flex;
             flex-direction: column;
-            padding: 0;
         }
         
         .modal-image {
@@ -165,56 +250,169 @@
         }
         
         .modal-details {
-            padding: 25px;
+            padding: 30px;
         }
         
         .modal-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 10px;
             color: #2c3e50;
         }
         
         .modal-price {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #e74c3c;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: bold;
         }
         
         .modal-description {
-            margin-bottom: 20px;
-            line-height: 1.6;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .contact-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .contact-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
         }
         
         .vk-contact {
             display: inline-flex;
             align-items: center;
-            background-color: #4a76a8;
+            background: linear-gradient(to right, #4a76a8, #3a5f8a);
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-            margin-top: 10px;
+            padding: 12px 25px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-size: 1.1rem;
         }
         
         .vk-contact:hover {
-            background-color: #3a5f8a;
+            background: linear-gradient(to right, #3a5f8a, #2c4a6e);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         
         .vk-icon {
-            margin-right: 8px;
-            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.3rem;
         }
         
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background-color: #2c3e50;
-            color: white;
+        /* О художнике */
+        .about-section {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             margin-top: 40px;
         }
         
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .about-text {
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            width: 100%;
+            margin-top: 30px;
+        }
+        
+        .highlight {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .highlight:hover {
+            transform: translateY(-5px);
+        }
+        
+        .highlight i {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .highlight h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        /* Контакты */
+        .contacts-section {
+            padding: 60px 20px;
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+        }
+        
+        .contacts-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .contacts-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .contact-item i {
+            font-size: 1.5rem;
+            color: #3498db;
+        }
+        
+        /* Подвал */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #1a252f;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        /* Адаптивность */
         @media (min-width: 768px) {
             .modal-body {
                 flex-direction: row;
@@ -228,58 +426,161 @@
             .modal-details {
                 width: 50%;
             }
+            
+            .about-content {
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .about-text {
+                text-align: left;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Шапка -->
     <header>
-        <h1>Галерея Ю. Арутюняна</h1>
-        <p class="subtitle">Оригинальные работы художника</p>
+        <div class="header-content">
+            <h1>Галерея Ю. Арутюняна</h1>
+            <p class="subtitle">Оригинальные картины ручной работы</p>
+            <div class="artist-bio">
+                <p>Юрий Арутюнян — современный художник, работающий в различных техниках и стилях. Его работы отличаются эмоциональной насыщенностью, глубоким смыслом и уникальным авторским почерком. Картины находятся в частных коллекциях в России и за рубежом.</p>
+            </div>
+        </div>
     </header>
     
-    <main>
-        <section class="gallery">
+    <!-- Галерея картин -->
+    <section class="gallery-section">
+        <h2 class="section-title">Коллекция картин</h2>
+        <div class="gallery">
             <!-- Картина 1 -->
             <div class="artwork" data-id="1">
-                <img src="foto1.jpg" alt="Картина 1">
+                <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Огонь и грация" class="artwork-img">
                 <div class="artwork-info">
-                    <h3 class="artwork-title">картина 1</h3>
-                    <p class="artwork-size">50x70 см, холст, масло</p>
-                    <button class="view-details">Подробнее</button>
+                    <h3 class="artwork-title">Огонь и грация</h3>
+                    <p class="artwork-details">80x60 см, холст, масло</p>
+                    <p class="artwork-price">25 000 руб.</p>
+                    <button class="view-details">Подробнее о картине</button>
                 </div>
             </div>
             
             <!-- Картина 2 -->
             <div class="artwork" data-id="2">
-                <img src="foto2.jpg" alt="Картина 2">
+                <img src="https://images.unsplash.com/photo-1543857778-c4a1a569e40e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Одинокое дерево" class="artwork-img">
                 <div class="artwork-info">
-                    <h3 class="artwork-title">картина 2</h3>
-                    <p class="artwork-size">60x80 см, холст, акрил</p>
-                    <button class="view-details">Подробнее</button>
+                    <h3 class="artwork-title">Одинокое дерево</h3>
+                    <p class="artwork-details">70x50 см, холст, акрил</p>
+                    <p class="artwork-price">18 500 руб.</p>
+                    <button class="view-details">Подробнее о картине</button>
                 </div>
             </div>
             
             <!-- Картина 3 -->
             <div class="artwork" data-id="3">
-                <img src="foto3.jpg" alt="Картина 3">
+                <img src="https://images.unsplash.com/photo-1578301978018-785a24d1468f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Беспокойные соседи" class="artwork-img">
                 <div class="artwork-info">
-                    <h3 class="artwork-title">картина 3</h3>
-                    <p class="artwork-size">40x60 см, холст, масло</p>
-                    <button class="view-details">Подробнее</button>
+                    <h3 class="artwork-title">Беспокойные соседи</h3>
+                    <p class="artwork-details">90x60 см, холст, масло</p>
+                    <p class="artwork-price">32 000 руб.</p>
+                    <button class="view-details">Подробнее о картине</button>
                 </div>
             </div>
             
             <!-- Картина 4 -->
             <div class="artwork" data-id="4">
-                <img src="foto4.jpg" alt="Картина 4">
+                <img src="https://images.unsplash.com/photo-1578321272172-b4b7d139b08f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Дерево желаний" class="artwork-img">
                 <div class="artwork-info">
-                    <h3 class="artwork-title">картина 4</h3>
-                    <p class="artwork-size">50x50 см, холст, акрил</p>
-                    <button class="view-details">Подробнее</button>
+                    <h3 class="artwork-title">Дерево желаний</h3>
+                    <p class="artwork-details">60x60 см, холст, акрил</p>
+                    <p class="artwork-price">22 000 руб.</p>
+                    <button class="view-details">Подробнее о картине</button>
                 </div>
             </div>
-        </section>
-    </main>
+            
+            <!-- Картина 5 (продана) -->
+            <div class="artwork sold" data-id="5">
+                <img src="https://images.unsplash.com/photo-1579762715459-5fbd4bfc8bfb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Закат в горах" class="artwork-img">
+                <div class="artwork-info">
+                    <h3 class="artwork-title">Закат в горах</h3>
+                    <p class="artwork-details">70x100 см, холст, масло</p>
+                    <p class="artwork-price">28 000 руб.</p>
+                    <button class="view-details">Подробнее о картине</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- О художнике -->
+    <section class="about-section">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="section-title">О художнике</h2>
+                <p>Юрий Арутюнян — талантливый современный художник с более чем 15-летним опытом работы в изобразительном искусстве. Его творческий путь начался в художественной школе, продолжился в Московском художественном институте, где он изучал классические техники живописи.</p>
+                <p>Работы Юрия отличаются уникальным сочетанием классических техник и современных тем. Художник экспериментирует с цветом, формой и текстурой, создавая произведения, которые вызывают сильный эмоциональный отклик у зрителя.</p>
+                <p>Картины Юрия Арутюняна участвовали в многочисленных выставках в России и за рубежом, а также находятся в частных коллекциях в разных странах мира.</p>
+            </div>
+        </div>
+        
+        <div class="about-highlights">
+            <div class="highlight">
+                <i class="fas fa-palette"></i>
+                <h3>Разнообразие техник</h3>
+                <p>Работа с маслом, акрилом, акварелью и смешанными техниками</p>
+            </div>
+            <div class="highlight">
+                <i class="fas fa-award"></i>
+                <h3>Профессионализм</h3>
+                <p>Более 15 лет опыта в изобразительном искусстве</p>
+            </div>
+            <div class="highlight">
+                <i class="fas fa-globe"></i>
+                <h3>Международное признание</h3>
+                <p>Участие в выставках в России и за рубежом</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Контакты -->
+    <section class="contacts-section">
+        <div class="contacts-content">
+            <h2 class="contacts-title">Свяжитесь с нами</h2>
+            <p>Если вас заинтересовала какая-либо картина или у вас есть вопросы, не стесняйтесь связаться с нами удобным для вас способом.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fab fa-vk"></i>
+                    <span>VK: vk.com/juliuscezar</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email: artgallery@example.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>Телефон: +7 (999) 123-45-67</span>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <!-- Модальное окно -->
     <div class="modal" id="artModal">
@@ -291,46 +592,54 @@
             <div class="modal-body">
                 <img id="modalImage" src="" alt="Картина" class="modal-image">
                 <div class="modal-details">
-                    <p class="modal-price" id="modalPrice">Цена: 15 000 руб.</p>
+                    <p class="modal-price" id="modalPrice">Цена: 25 000 руб.</p>
                     <p class="modal-description" id="modalDescription">Описание картины...</p>
-                    <a href="#" class="vk-contact" id="vkLink" target="_blank">
-                        <span class="vk-icon">VK</span> Связаться через ВКонтакте
-                    </a>
+                    
+                    <div class="contact-section">
+                        <h3 class="contact-title">Заинтересовала картина?</h3>
+                        <p>Свяжитесь с нами для уточнения деталей покупки, доставки или получения дополнительной информации.</p>
+                        <a href="https://vk.com/juliuscezar" class="vk-contact" target="_blank">
+                            <i class="fab fa-vk vk-icon"></i> Написать в ВКонтакте
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- Подвал -->
     <footer>
-        <p>© 2025 Галерея картин. Все права защищены.</p>
+        <p>© 2023 Галерея Ю. Арутюняна. Все права защищены.</p>
+        <p>Сайт создан для демонстрации и продажи оригинальных картин</p>
     </footer>
 
     <script>
         // Данные о картинах
         const artworks = {
             1: {
-                title: "картина 1",
-                price: "15 000 руб.",
-                description: "Картина передает атмосферу золотой осени. Написана маслом на холсте с использованием теплых оттенков. Идеально подойдет для интерьера в классическом стиле.",
-                vkLink: "https://vk.com/im?sel=123456789"
+                title: "Огонь и грация",
+                price: "25 000 руб.",
+                description: "Динамичная композиция, передающая энергию и движение. Картина сочетает в себе яркие, насыщенные цвета с тонкими переходами оттенков. Написана маслом на холсте с использованием техники импасто для создания объемного эффекта. Идеально подойдет для современного интерьера с акцентной стеной."
             },
             2: {
-                title: "картина 2",
+                title: "Одинокое дерево",
                 price: "18 500 руб.",
-                description: "Яркая картина с изображением морского побережья в летний день. Написана акриловыми красками, что придает работе насыщенность и долговечность.",
-                vkLink: "https://vk.com/im?sel=123456789"
+                description: "Лирический пейзаж, передающий настроение уединения и размышлений. Дерево, стоящее на холме, символизирует стойкость и внутреннюю силу. Работа выполнена акриловыми красками, что придает изображению особую яркость и долговечность. Картина создает атмосферу спокойствия и гармонии."
             },
             3: {
-                title: "картина 3",
-                price: "12 000 руб.",
-                description: "Ночной городской пейзаж с красивой иллюминацией. Картина создает уютную атмосферу и станет отличным дополнением современного интерьера.",
-                vkLink: "https://vk.com/im?sel=123456789"
+                title: "Беспокойные соседи",
+                price: "32 000 руб.",
+                description: "Экспрессивная работа, исследующая тему человеческих взаимоотношений и социального взаимодействия. Художник использует контрастные цвета и сложную композицию для передачи эмоционального напряжения. Картина написана маслом с элементами коллажа. Каждый зритель может найти в этой работе свой собственный смысл."
             },
             4: {
-                title: "картина 4",
-                price: "9 500 руб.",
-                description: "Яркая абстрактная композиция с цветочными мотивами. Картина наполнена позитивной энергией и станет акцентным элементом в любом помещении.",
-                vkLink: "https://vk.com/juliuscezar"
+                title: "Дерево желаний",
+                price: "22 000 руб.",
+                description: "Символическая работа, вдохновленная народными преданиями о деревьях, исполняющих желания. Яркая цветовая палитра и декоративные элементы создают ощущение сказки и волшебства. Картина выполнена акрилом с добавлением металлических пигментов для создания мерцающего эффекта."
+            },
+            5: {
+                title: "Закат в горах",
+                price: "28 000 руб.",
+                description: "Величественный горный пейзаж, залитый лучами заходящего солнца. Картина передает красоту и мощь природы, заставляя зрителя почувствовать себя на вершине горы. Написана маслом с использованием множества слоев для создания глубины и объема. К сожалению, эта работа уже нашла своего нового владельца."
             }
         };
 
@@ -340,7 +649,6 @@
         const modalImage = document.getElementById('modalImage');
         const modalPrice = document.getElementById('modalPrice');
         const modalDescription = document.getElementById('modalDescription');
-        const vkLink = document.getElementById('vkLink');
         const closeModal = document.querySelector('.close-modal');
         
         // Добавляем обработчики событий для картин
@@ -354,22 +662,24 @@
                 modalImage.src = this.querySelector('img').src;
                 modalPrice.textContent = `Цена: ${artworkData.price}`;
                 modalDescription.textContent = artworkData.description;
-                vkLink.href = artworkData.vkLink;
                 
                 // Показываем модальное окно
                 modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
             });
         });
         
         // Закрытие модального окна
         closeModal.addEventListener('click', function() {
             modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Возвращаем прокрутку
         });
         
         // Закрытие модального окна при клике вне его
         window.addEventListener('click', function(event) {
             if (event.target === modal) {
                 modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Возвращаем прокрутку
             }
         });
         
@@ -377,6 +687,7 @@
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Возвращаем прокрутку
             }
         });
     </script>
